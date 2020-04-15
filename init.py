@@ -16,5 +16,5 @@ if __name__ == "__main__":
             if "Metadata" in file:
                 continue
             metadata.write(file+"\n")
+            files.append(file)
     client.checkMetadata()
-    
