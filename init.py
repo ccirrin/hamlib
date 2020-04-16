@@ -1,20 +1,25 @@
 # Handle the grabing of initial metadata
     # Call check metadata
-# if there are files missing in download call peers to get files
 # call upload functions if there are files in upload folder
 # Create a list of files in upload and download folder
 files = []
 ips = []
+upfiles= []
 import client
+import uploads
 import os
 def init():
     os.chdir("Downloads")
-    metadata = open("Metadata",'w')
-    metadata.write("IPs:\nFiles:\n")
-    for root, dirs, files in os.walk(os.getcwd()):
-        for file in files:
+    for root, dirs, fil in os.walk(os.getcwd()):
+        for file in fil:
             if "Metadata" in file:
                 continue
-            metadata.write(file+"\n")
             files.append(file)
     client.checkMetadata()
+    os.chdir("..\\Uploads")
+    for root, dirs, fil in os.walk(os.getcwd()):
+        for file in fil:
+            upfiles.append(file)
+    uploads.massUpload()
+
+
