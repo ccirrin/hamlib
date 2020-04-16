@@ -7,14 +7,13 @@ def checkMetadata():
     # for line in fmeta:
     #     if "Files:" in line:
     #         break
-    metadata = open('metadata','r')
-    for line in metadata:
+    for line in fmetadata:
         if "IPs:" in line:
             continue
         init.ips.append(line.rstrip("\n"))
         if "Files:" in line:
             break
-    for line in metadata:
+    for line in fmetadata:
         templine = line.rstrip("\n")
         # if file match do nothing
         if templine in init.files:
@@ -22,6 +21,8 @@ def checkMetadata():
         # if a file is not found call requestFile from a random user in IP list
         else:
             requestFile(templine)
+            init.files.append(templine)
+    
     
 
 
