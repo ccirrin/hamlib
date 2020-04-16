@@ -7,7 +7,7 @@ files = []
 ips = []
 import client
 import os
-if __name__ == "__main__":
+def init():
     os.chdir("Downloads")
     metadata = open("Metadata",'w')
     metadata.write("IPs:\nFiles:\n")

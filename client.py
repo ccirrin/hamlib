@@ -17,10 +17,11 @@ def checkMetadata():
         if templine in init.files:
             continue
         # if a file is not found call requestFile from a random user in IP list
-        else
+        else:
             requestFile(templine)
 
 
-# requestFile()
+def requestFile(file):
     # choose a random peer thats online and try to download a file from them
     # switch after 20 seconds
+    return
