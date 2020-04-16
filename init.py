@@ -8,6 +8,9 @@ upfiles= []
 import client
 import uploads
 import os
+import threading
+import sys
+import server
 def init():
     os.chdir("Downloads")
     for root, dirs, fil in os.walk(os.getcwd()):
@@ -21,5 +24,6 @@ def init():
         for file in fil:
             upfiles.append(file)
     uploads.massUpload()
+    threading.Thread(target = server.peerListening, args = (sys.argv[1]).start())
 
 
