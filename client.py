@@ -2,17 +2,16 @@ import init
 import random
 import socket
 def checkMetadata():
-    # get the metadata from firebase and check if there are any new files
-    #fmeta = firebase()
-    # for line in fmeta:
+
+    #get a list of firebase IPS
+
+    #get a list of firebase FILES
+    # for line in fmetadata:
+    #     if "IPs:" in line:
+    #         continue
+    #     init.ips.append(line.rstrip("\n"))
     #     if "Files:" in line:
     #         break
-    for line in fmetadata:
-        if "IPs:" in line:
-            continue
-        init.ips.append(line.rstrip("\n"))
-        if "Files:" in line:
-            break
     for line in fmetadata:
         templine = line.rstrip("\n")
         # if file match do nothing
