@@ -49,12 +49,15 @@ def checkfiles(user, directory):
                 # Let database know that we could not retrieve file from this ip
                 fire.informdb(user, ip, f)
 
+
+
                 # Choose another ip
                 ip = ips[random.randint(0,len(ips) - 1)]
                 ips.remove(ip)
             
-            localfiles.append(f)
-            fire.addfile(user, f)
+            if (len(ips) != 0):
+                localfiles.append(f)
+                fire.addfile(user, f)
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
