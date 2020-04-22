@@ -11,19 +11,15 @@ def sendFile(sock,http,file):
     f.close()
 
 
-def peerListening(user):
-    # create a socket that handles listening for connections from other peers
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(("",user.port))
-    print("Server is running on port:", user.port)
-    sock.listen(5)
+def peerListening(sock):
     #Run Server Listening  
     while True:
-        connection, address = sock.accept()
-        connection.settimeout(15)
-        if address[0] == user.ip:
-            connection.close()
+        connection = None
+        try:
+            connection, address = sock.accept()
+        except:
             break
+        connection.settimeout(15)
         threading.Thread(target = handleConnection, args = [connection]).start()
     
 def handleConnection(sock):

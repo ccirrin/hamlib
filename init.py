@@ -29,8 +29,14 @@ def init():
         for f in fil:
             fire.addfile(user, f)
     
+    # create a socket that handles listening for connections from other peers
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(("",user.port))
+    print("Server is running on port:", user.port)
+    sock.listen(5)
+    
     # Spin off server thread
-    t = threading.Thread(target = server.peerListening, args = [user])
+    t = threading.Thread(target = server.peerListening, args = [sock])
     t.start()
     # Spin off client thread
     # cheeser
@@ -39,7 +45,7 @@ def init():
     stop = input()
     while stop != "q":
         stop = input()
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect( (user.ip, user.port))
+    sock.close()
     t.join()
     # Inform server that files will no longer be available
     for root, dirs, fil in os.walk(os.getcwd()):
