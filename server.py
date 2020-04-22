@@ -26,7 +26,7 @@ def handleConnection(sock):
     data = sock.recv(2048) 
     data = str(data)
     space = 0
-    file = None
+    file = ""
     #Find location of file in request
     for x in data:
             if x == " ":
