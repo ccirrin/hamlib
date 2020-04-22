@@ -37,11 +37,11 @@ def init():
     sock.listen(5)
     
     # Spin off server thread
-    t = threading.Thread(target = server.peerListening, args = [sock])
+    t = threading.Thread(target = server.peerListening, args = [sock], daemon=True)
     t.start()
 
     # Spin off client thread
-    ct = threading.Thread(target = client.filechecker, args = [user, directory, localfiles])
+    ct = threading.Thread(target = client.filechecker, args = [user, directory, localfiles], daemon=True)
     ct.start()
 
     print("Type 'q' to quit!")
@@ -57,7 +57,6 @@ def init():
 
     sock.close()
     t.join()
-    ct.join()
            
 if  __name__ == "__main__": 
     init()

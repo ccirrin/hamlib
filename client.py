@@ -12,7 +12,7 @@ import fire
 # Repeatedly check files to sync states
 def filechecker(user, directory, prevfiles):
     prev = prevfiles
-    while not init.stop:
+    while True:
         print("stop: " + str(init.stop))
         prev = checkfiles(user, directory, prev)
 
@@ -59,6 +59,7 @@ def checkfiles(user, directory, prevfiles):
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
+    # create client socket that handles requesting files from other peers
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     fd = open(file,"wb")
 
@@ -101,7 +102,6 @@ def requestFile(user, ip, file):
         fd.close()
         sock.close()
         return True
-
     except:
         fd.close()
         sock.close()
