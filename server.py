@@ -17,7 +17,6 @@ def peerListening(sock):
         connection = None
         try:
             connection, address = sock.accept()
-            print("Connection Received from ip: " + address)
         except:
             break
         connection.settimeout(15)
