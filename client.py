@@ -9,6 +9,13 @@ import fire
 # Description: provide functions that requests files and check if there are
 # new files added to channel directory
 
+# Repeatedly check files to sync states
+def filechecker(user, directory, prevfiles):
+    prev = prevfiles
+    while not init.stop:
+        print("stop: " + str(init.stop))
+        prev = checkfiles(user, directory, prev)
+
 # Sync states between host and database
 def checkfiles(user, directory, prevfiles):
     localfiles = []
@@ -17,6 +24,7 @@ def checkfiles(user, directory, prevfiles):
     for root, dirs, fil in os.walk(directory):
         for f in fil:
             if f not in prevfiles:
+                localfiles.append(f)
                 fire.addfile(user, f)
     
     # Get all files on server
@@ -26,16 +34,28 @@ def checkfiles(user, directory, prevfiles):
     for f in files:
         if f not in localfiles:
             ips = fire.getips(user, f)
+            if (len(ips) == 0):
+                continue
+
+            ips.remove(user.ip)
+            if (len(ips) == 0):
+                continue
+
             ip = ips[random.randint(0,len(ips) - 1)]
             ips.remove(ip)
 
             while requestFile(user, ip, f) != True and len(ips) != 0:
+                print("yeet: " + f)
                 # Let database know that we could not retrieve file from this ip
                 fire.informdb(user, ip, f)
 
                 # Choose another ip
                 ip = ips[random.randint(0,len(ips) - 1)]
-                ips.remove(ip)  
+                ips.remove(ip)
+            
+            localfiles.append(f)
+    
+    return localfiles
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):

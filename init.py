@@ -11,10 +11,8 @@ import socket
 # call upload functions if there are files in upload folder
 # Create a list of files in upload and download folder
 
-files = []
-ips = []
-upfiles= []
-stop = ""
+stop = False
+
 def init():
     # Get ip address of host
     hostname = socket.gethostname()
@@ -25,8 +23,11 @@ def init():
 
     # Check what files current user has and inform firebase
     os.chdir("channel" + user.channel)
-    for root, dirs, fil in os.walk(os.getcwd()):
+    directory = os.getcwd()
+    localfiles = []
+    for root, dirs, fil in os.walk(directory):
         for f in fil:
+            localfiles.append(f)
             fire.addfile(user, f)
     
     # create a socket that handles listening for connections from other peers
@@ -38,19 +39,25 @@ def init():
     # Spin off server thread
     t = threading.Thread(target = server.peerListening, args = [sock])
     t.start()
+
     # Spin off client thread
-    # cheeser
+    ct = threading.Thread(target = client.filechecker, args = [user, directory, localfiles])
+    ct.start()
 
     print("Type 'q' to quit!")
-    stop = input()
-    while stop != "q":
-        stop = input()
-    sock.close()
-    t.join()
+    a = input()
+    while a != "q":
+        a = input()
+
+    stop = True
     # Inform server that files will no longer be available
     for root, dirs, fil in os.walk(os.getcwd()):
         for f in fil:
             fire.discontinuefile(user, f)
+
+    sock.close()
+    t.join()
+    ct.join()
            
 if  __name__ == "__main__": 
     init()
