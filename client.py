@@ -3,6 +3,7 @@ import random
 import socket
 import os
 import fire
+import time
 
 # client.py - Client side functions, 
 # -----------------------------------------------------------------------------
@@ -15,7 +16,7 @@ def filechecker(user, directory, prevfiles):
     while True:
         # print("stop: " + str(init.stop))
         prev = checkfiles(user, directory, prev)
-        sleep()
+        time.sleep(60)
 
 # Sync states between host and database
 def checkfiles(user, directory, prevfiles):
