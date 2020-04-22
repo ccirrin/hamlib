@@ -14,7 +14,7 @@ import time
 def filechecker(user, directory, prevfiles):
     prev = prevfiles
     while True:
-        # print("stop: " + str(init.stop))
+        print("checking files")
         prev = checkfiles(user, directory, prev)
         time.sleep(60)
 
@@ -38,10 +38,12 @@ def checkfiles(user, directory, prevfiles):
             ips = fire.getips(user, f)
             if (len(ips) == 0):
                 continue
-
-            ips.remove(user.ip)
-            if (len(ips) == 0):
-                continue
+            
+            if (user.ip in ips):
+                print("this should not be triggered")
+                ips.remove(user.ip)
+                if (len(ips) == 0):
+                    continue
 
             ip = ips[random.randint(0,len(ips) - 1)]
             ips.remove(ip)
