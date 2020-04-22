@@ -13,7 +13,7 @@ import fire
 def filechecker(user, directory, prevfiles):
     prev = prevfiles
     while True:
-        print("stop: " + str(init.stop))
+        # print("stop: " + str(init.stop))
         prev = checkfiles(user, directory, prev)
 
 # Sync states between host and database
@@ -45,7 +45,7 @@ def checkfiles(user, directory, prevfiles):
             ips.remove(ip)
 
             while requestFile(user, ip, f) != True and len(ips) != 0:
-                print("yeet: " + f)
+                # print("yeet: " + f)
                 # Let database know that we could not retrieve file from this ip
                 fire.informdb(user, ip, f)
 
