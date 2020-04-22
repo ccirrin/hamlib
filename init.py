@@ -1,5 +1,4 @@
 import client
-import uploads
 import os
 import threading
 import sys
@@ -40,6 +39,12 @@ def init():
     a = input()
     while a != "q":
         a = input()
+
+    # Inform server that files will no longer be available
+    os.chdir("channel" + user.channel)
+    for root, dirs, fil in os.walk(os.getcwd()):
+        for f in fil:
+            fire.discontinuefile(user, f)
            
 if  __name__ == "__main__": init()
 
