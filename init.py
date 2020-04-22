@@ -14,7 +14,7 @@ import socket
 files = []
 ips = []
 upfiles= []
-
+stop = ""
 def init():
     # Get ip address of host
     hostname = socket.gethostname()
@@ -30,16 +30,17 @@ def init():
             fire.addfile(user, f)
     
     # Spin off server thread
-    threading.Thread(target = server.peerListening, args = [user]).start()
-
+    t = threading.Thread(target = server.peerListening, args = [user])
+    t.start()
     # Spin off client thread
     # cheeser
 
     print("Type 'q' to quit!")
-    a = input()
-    while a != "q":
-        a = input()
-
+    stop = input()
+    while stop != "q":
+        stop = input()
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect( (user.ip, user.port))
+    t.join()
     # Inform server that files will no longer be available
     for root, dirs, fil in os.walk(os.getcwd()):
         for f in fil:
