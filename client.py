@@ -19,7 +19,7 @@ def filechecker(user, directory, prevfiles):
         time.sleep(60)
 
 # Sync states between host and database
-def checkfiles(user, directory, prevfiles):
+def checkfiles(user, directory):
     localfiles = []
 
     # Check files in channel directory and track new files
