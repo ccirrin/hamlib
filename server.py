@@ -58,5 +58,4 @@ def handleConnection(sock):
             http = bytes(http, encoding='utf8')
             sendFile(sock,http,file)
     sock.close()
-    os.chdir("..")
 
