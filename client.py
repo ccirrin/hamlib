@@ -103,5 +103,6 @@ def requestFile(user, ip, file):
         sock.close()
         return True
     except:
+        print("connection failed")
         sock.close()
         return False
