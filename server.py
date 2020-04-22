@@ -10,11 +10,11 @@ def sendFile(sock,http,file):
     f.close()
 
 
-def peerListening(port):
+def peerListening(user):
     # create a socket that handles listening for connections from other peers
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(("",port))
-    print("Server is running on port:", port)
+    sock.bind(("",user.port))
+    print("Server is running on port:", user.port)
     sock.listen(5)
     while True:
         connection, address = sock.accept()
@@ -22,7 +22,6 @@ def peerListening(port):
         threading.Thread(target = handleConnection, args = (connection)).start()
     
 def handleConnection(sock):
-    os.chdir("Downloads")
     data = sock.recv(2048) 
     data = str(data)
     for x in data:
@@ -51,27 +50,6 @@ def handleConnection(sock):
             http = "200 OK\r\n" +"Content-Length: " + str(os.stat(file).st_size)+ " \r\n\r\n"
             http = bytes(http, encoding='utf8')
             sendFile(sock,http,file)
-    #file is being to server
-    elif "POST" in data:
-        length = data[data.index("Content-Length"):]
-        space = 0
-        size = ""
-        for x in length:
-                if space:
-                    size=size + x
-                if x == " ":
-                    space+=1
-                    if space == 2:
-                        break
-        size= int(size)
-        data =bytes()
-        #receive messages until entire file arrives
-        while size > 0:
-            data += sock.recv(1024)
-            size -= 1024
-        fd = open(file,"wb")
-        fd.write(data)
-        fd.close()
     sock.close()
     os.chdir("..")
 
