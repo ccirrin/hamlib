@@ -15,7 +15,7 @@ def filechecker(user, directory, prevfiles):
     prev = prevfiles
     while True:
         print("checking files")
-        prev = checkfiles(user, directory, prev)
+        checkfiles(user, directory)
         time.sleep(60)
 
 # Sync states between host and database
@@ -25,9 +25,7 @@ def checkfiles(user, directory, prevfiles):
     # Check files in channel directory and track new files
     for root, dirs, fil in os.walk(directory):
         for f in fil:
-            if f not in prevfiles:
-                localfiles.append(f)
-                fire.addfile(user, f)
+            fire.addfile(user, f)
     
     # Get all files on server
     files = fire.getfiles(user)
@@ -58,8 +56,6 @@ def checkfiles(user, directory, prevfiles):
                 ips.remove(ip)
             
             localfiles.append(f)
-    
-    return localfiles
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
