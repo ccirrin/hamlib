@@ -30,7 +30,7 @@ def init():
             fire.addfile(user, f)
     
     # Spin off server thread
-    # threading.Thread(target = server.peerListening, args = (sys.argv[1]).start())
+    threading.Thread(target = server.peerListening, args = [user]).start()
 
     # Spin off client thread
     # cheeser
@@ -45,5 +45,6 @@ def init():
         for f in fil:
             fire.discontinuefile(user, f)
            
-if  __name__ == "__main__": init()
+if  __name__ == "__main__": 
+    init()
 
