@@ -5,7 +5,7 @@ import sys
 import server
 import fire
 import socket
-
+from requests import get
 # Handle the grabing of initial metadata
     # Call check metadata
 # call upload functions if there are files in upload folder
@@ -15,8 +15,8 @@ stop = False
 
 def init():
     # Get ip address of host
-    hostname = socket.gethostname()
-    ip = socket.gethostbyname(hostname)
+
+    ip = get('https://api.ipify.org').text
 
     # Prompt user for channel they would like to join
     user = fire.promptuser(ip)
