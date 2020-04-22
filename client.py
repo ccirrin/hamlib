@@ -13,6 +13,7 @@ import time
 # Repeatedly check files to sync states
 def filechecker(user, directory):
     while True:
+        print("checking files")
         checkfiles(user, directory)
         time.sleep(60)
 
@@ -28,6 +29,7 @@ def checkfiles(user, directory):
     
     # Get all files on server
     files = fire.getfiles(user)
+    print(files)
 
     # Request all files that current host does not have
     for f in files:
@@ -43,26 +45,31 @@ def checkfiles(user, directory):
 
             ip = ips[random.randint(0,len(ips) - 1)]
             ips.remove(ip)
-
-            while requestFile(user, ip, f) != True and len(ips) != 0:
+            
+            success = requestFile(user, ip, f)
+            while success != True and len(ips) != 0:
                 # print("yeet: " + f)
                 # Let database know that we could not retrieve file from this ip
                 fire.informdb(user, ip, f)
 
-
-
                 # Choose another ip
                 ip = ips[random.randint(0,len(ips) - 1)]
                 ips.remove(ip)
+
+                # Try requesting from another IP
+                success = requestFile(user, ip, f)
             
-            if (len(ips) != 0):
+            if success:
                 localfiles.append(f)
                 fire.addfile(user, f)
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
+    print("requesting file: " + file + " from ip: " + ip)
+
     # create client socket that handles requesting files from other peers
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
 
     try:
         sock.connect((ip, user.port))
@@ -102,7 +109,9 @@ def requestFile(user, ip, file):
         fd.write(data)
         fd.close()
         sock.close()
+        print("wrote file")
         return True
     except:
+        print("exception")
         sock.close()
         return False
