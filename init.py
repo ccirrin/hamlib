@@ -56,7 +56,6 @@ def init():
             fire.discontinuefile(user, f)
 
     sock.close()
-    t.join()
            
 if  __name__ == "__main__": 
     init()
