@@ -17,6 +17,7 @@ def peerListening(user):
     sock.bind(("",user.port))
     print("Server is running on port:", user.port)
     sock.listen(5)
+    #Run Server Listening  
     while True:
         connection, address = sock.accept()
         connection.settimeout(15)
@@ -29,6 +30,7 @@ def handleConnection(sock):
     data = sock.recv(2048) 
     data = str(data)
     space = 0
+    #Find location of file in request
     for x in data:
             if x == " ":
                 space+=1
