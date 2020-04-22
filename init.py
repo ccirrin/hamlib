@@ -24,10 +24,8 @@ def init():
     # Check what files current user has and inform firebase
     os.chdir("channel" + user.channel)
     directory = os.getcwd()
-    localfiles = []
     for root, dirs, fil in os.walk(directory):
         for f in fil:
-            localfiles.append(f)
             fire.addfile(user, f)
     
     # create a socket that handles listening for connections from other peers
@@ -41,7 +39,7 @@ def init():
     t.start()
 
     # Spin off client thread
-    ct = threading.Thread(target = client.filechecker, args = [user, directory, localfiles], daemon=True)
+    ct = threading.Thread(target = client.filechecker, args = [user, directory], daemon=True)
     ct.start()
 
     print("Type 'q' to quit!")

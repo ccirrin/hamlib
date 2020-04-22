@@ -11,10 +11,8 @@ import time
 # new files added to channel directory
 
 # Repeatedly check files to sync states
-def filechecker(user, directory, prevfiles):
-    prev = prevfiles
+def filechecker(user, directory):
     while True:
-        print("checking files")
         checkfiles(user, directory)
         time.sleep(60)
 
@@ -39,7 +37,6 @@ def checkfiles(user, directory):
                 continue
             
             if (user.ip in ips):
-                print("this should not be triggered")
                 ips.remove(user.ip)
                 if (len(ips) == 0):
                     continue
@@ -57,6 +54,7 @@ def checkfiles(user, directory):
                 ips.remove(ip)
             
             localfiles.append(f)
+            fire.addfile(user, f)
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
@@ -103,6 +101,5 @@ def requestFile(user, ip, file):
         sock.close()
         return True
     except:
-        print("connection failed")
         sock.close()
         return False
