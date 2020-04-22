@@ -14,7 +14,7 @@ def checkfiles(user, directory, prevfiles):
     localfiles = []
 
     # Check files in channel directory and track new files
-    for root, dirs, fil in os.walk(os.getcwd()):
+    for root, dirs, fil in os.walk(directory):
         for f in fil:
             if f not in prevfiles:
                 fire.addfile(user, f)
@@ -29,7 +29,7 @@ def checkfiles(user, directory, prevfiles):
             ip = ips[random.randint(0,len(ips) - 1)]
             ips.remove(ip)
 
-            while requestFile(user, ip, f) != True and len(ip) != 0:
+            while requestFile(user, ip, f) != True and len(ips) != 0:
                 # Let database know that we could not retrieve file from this ip
                 fire.informdb(user, ip, f)
 
