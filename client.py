@@ -15,6 +15,7 @@ def filechecker(user, directory, prevfiles):
     while True:
         # print("stop: " + str(init.stop))
         prev = checkfiles(user, directory, prev)
+        sleep()
 
 # Sync states between host and database
 def checkfiles(user, directory, prevfiles):
@@ -61,7 +62,6 @@ def checkfiles(user, directory, prevfiles):
 def requestFile(user, ip, file):
     # create client socket that handles requesting files from other peers
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    fd = open(file,"wb")
 
     try:
         sock.connect((ip, user.port))
@@ -74,7 +74,6 @@ def requestFile(user, ip, file):
         #verify request       
         if "404" in head:
                 sock.close()
-                fd.close()
                 print("Error 404: File "+ file +" not found. Trying different IP.")
                 return False
         
@@ -98,11 +97,11 @@ def requestFile(user, ip, file):
             data += sock.recv(1024)
             size -= 1024
         
+        fd = open(file,"wb")
         fd.write(data)
         fd.close()
         sock.close()
         return True
     except:
-        fd.close()
         sock.close()
         return False
