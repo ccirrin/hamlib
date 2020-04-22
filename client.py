@@ -25,6 +25,7 @@ def checkfiles(user, directory):
     # Check files in channel directory and track new files
     for root, dirs, fil in os.walk(directory):
         for f in fil:
+            localfiles.append(f)
             fire.addfile(user, f)
     
     # Get all files on server
