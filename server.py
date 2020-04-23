@@ -2,6 +2,12 @@ import socket
 import os
 import threading
 import init
+
+# server.py - Server side functions
+# -----------------------------------------------------------------------------
+# Description: Provide functions that handle incoming GET requests, send the
+# file to the host that requested it.
+
 def sendFile(sock,http,file):
     # Handle sending a file from downloads to a requester
     sock.sendall(http)
@@ -47,12 +53,12 @@ def handleConnection(sock):
         # Check if we have a file
         if not os.path.exists(file):
                 # if no file found send nothing found
-                print("File: " +file+ " does not exist.")
+                print("\t-File does not exist: " + file)
                 http += "404 Not Found\r\n\r\n"
                 sock.sendall(bytes(http, encoding= 'utf8'))
         else:
             # if so call sendFile
-            print("Sending "+ file)
+            print("\t-Sending file: " + file)
             http = "200 OK\r\n" +"Content-Length: " + str(os.stat(file).st_size)+ " \r\n\r\n"
             http = bytes(http, encoding='utf8')
             sendFile(sock,http,file)
