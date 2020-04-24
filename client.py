@@ -41,31 +41,26 @@ def checkfiles(user):
             while ((user.ip, user.port) in ips):
                 ips.remove((user.ip, user.port))
             
-            # If no one on server has file, don't bother requesting
-            if (len(ips) == 0):
-                continue
+            # Try to request file from random peer until we get it
+            while True:
 
-            # Choose a random peer to request file from
-            ip = ips[random.randint(0,len(ips) - 1)]
-            ips.remove(ip)
-            
-            # Continue trying to request file from random peer until we get it
-            success = requestFile(user, ip, f)
-            while success != True and len(ips) != 0:
-                # Let database know that we could not retrieve file from this ip
-                fire.informdb(user, ip, f)
+                # If no one on server has file, don't bother requesting
+                if (len(ips) == 0):
+                    break
 
                 # Choose another ip
                 ip = ips[random.randint(0,len(ips) - 1)]
                 ips.remove(ip)
-
+                
                 # Try requesting from another IP
-                success = requestFile(user, ip, f)
-            
-            if success:
-                # If we now have the file, let the database know
-                localfiles.append(f)
-                fire.addfile(user, f)
+                if (requestFile(user, ip, f)):
+                    # If we now have the file, let the database know
+                    localfiles.append(f)
+                    fire.addfile(user, f)
+                    break
+
+                # Let database know that we could not retrieve file from this ip
+                fire.informdb(user, ip, f)
 
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
