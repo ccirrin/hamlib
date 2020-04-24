@@ -4,6 +4,7 @@ import socket
 import os
 import fire
 import time
+import safesocket
 
 # client.py - Client side functions 
 # -----------------------------------------------------------------------------
@@ -79,8 +80,10 @@ def requestFile(user, ip, file):
         sock.connect((ip[0], ip[1]))
 
         http="GET " + file + " HTTP/1.1\r\n\r\n"
-        sock.sendall(bytes(http, encoding = "utf-8"))
-        head = sock.recv(1024)
+        safesocket.safesend(sock, http.encode())
+        #sock.sendall(bytes(http, encoding = "utf-8"))
+        head = safesocket.safercv(sock, 1024)
+        #head = sock.recv(1024)
         head = str(head)
         
         #verify request       
@@ -102,12 +105,13 @@ def requestFile(user, ip, file):
                         break
         
         size = int(size)
-        data = bytes()
+        data = safesocket.safercv(sock, size)
+        # data = bytes()
         
         #receive messages until entire file arrives
-        while size > 0:
-            data += sock.recv(1024)
-            size -= 1024
+        # while size > 0:
+        #     data += sock.recv(1024)
+        #     size -= 1024
         
         fd = open(file,"wb")
         fd.write(data)

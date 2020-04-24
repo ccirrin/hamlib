@@ -2,6 +2,7 @@ import socket
 import os
 import threading
 import init
+import safesocket
 
 # server.py - Server side functions
 # -----------------------------------------------------------------------------
@@ -10,10 +11,12 @@ import init
 
 def sendFile(sock,http,file):
     # Handle sending a file from downloads to a requester
-    sock.sendall(http)
+    # sock.sendall(http)
+    safesocket.safesend(sock, http)
     f = open(file,"rb")
-    http= f.read()
-    sock.sendall(http)
+    http = f.read()
+    safesocket.safesend(sock, http)
+    # sock.sendall(http)
     f.close()
 
 
@@ -29,7 +32,8 @@ def peerListening(sock):
         threading.Thread(target = handleConnection, args = [connection]).start()
     
 def handleConnection(sock):
-    data = sock.recv(2048) 
+    data = safesocket.safercv(sock, 2048)
+    #data = sock.recv(2048) 
     data = str(data)
     space = 0
     file = ""
@@ -55,7 +59,8 @@ def handleConnection(sock):
                 # if no file found send nothing found
                 print("\t-File does not exist: " + file)
                 http += "404 Not Found\r\n\r\n"
-                sock.sendall(bytes(http, encoding= 'utf8'))
+                safesocket.safesend(sock, http.encode())
+                #sock.sendall(bytes(http, encoding= 'utf8'))
         else:
             # if so call sendFile
             print("\t-Sending file: " + file)
