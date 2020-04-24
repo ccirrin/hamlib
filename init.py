@@ -21,11 +21,20 @@ def main():
         # Prompt user for channel they would like to join
         user = fire.promptuser(ip)
 
-        chandir = "channel-" + user.channel
+        chandir = "channels"
         try:
-            # Change directory to server directory
+            # Change directory to channels directory
             os.chdir(chandir)
-        except FileNotFoundError:
+        except:
+            # Make directory
+            os.mkdir(chandir)
+            os.chdir(chandir)
+
+        chandir = user.channel
+        try:
+            # Change directory to specific channel directory
+            os.chdir(chandir)
+        except:
             # Make directory
             os.mkdir(chandir)
             os.chdir(chandir)
