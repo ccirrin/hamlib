@@ -82,8 +82,8 @@ def requestFile(user, ip, file):
         http="GET " + file + " HTTP/1.1\r\n\r\n"
         safesocket.safesend(sock, http.encode())
         #sock.sendall(bytes(http, encoding = "utf-8"))
-        head = safesocket.safercv(sock, 1024)
-        #head = sock.recv(1024)
+        # head = safesocket.safercv(sock, 1024)
+        head = sock.recv(1024)
         head = str(head)
         
         #verify request       

@@ -32,8 +32,8 @@ def peerListening(sock):
         threading.Thread(target = handleConnection, args = [connection]).start()
     
 def handleConnection(sock):
-    data = safesocket.safercv(sock, 2048)
-    #data = sock.recv(2048) 
+    # data = safesocket.safercv(sock, 2048)
+    data = sock.recv(2048) 
     data = str(data)
     space = 0
     file = ""
