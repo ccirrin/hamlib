@@ -30,7 +30,7 @@ def main():
             os.mkdir(chandir)
             os.chdir(chandir)
         
-        # create a socket that handles listening for connections from other peers
+        # Create a socket that handles listening for connections from other peers
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.bind(("",user.port))
         print("Server is running on port:", user.port)

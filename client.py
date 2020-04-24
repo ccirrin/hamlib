@@ -72,7 +72,7 @@ def requestFile(user, ip, file):
     assert(len(ip) == 2)
     print("\t-Requesting file: " + file + " from ip: " + ip[0])
 
-    # create client socket that handles requesting files from other peers
+    # Create client socket that handles requesting files from other peers
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
 
@@ -81,18 +81,16 @@ def requestFile(user, ip, file):
 
         http="GET " + file + " HTTP/1.1\r\n\r\n"
         safesocket.safesend(sock, http.encode())
-        #sock.sendall(bytes(http, encoding = "utf-8"))
-        # head = safesocket.safercv(sock, 1024)
         head = sock.recv(1024)
         head = str(head)
         
-        #verify request       
+        # Verify request       
         if "404" in head:
                 sock.close()
                 print("\t-Did not receive file: " + file + " from ip: " + ip[0])
                 return False
         
-        #find file length
+        # Find file length
         length = head[head.index("Content-Length"):]
         space = 0
         size = ""
@@ -106,12 +104,6 @@ def requestFile(user, ip, file):
         
         size = int(size)
         data = safesocket.safercv(sock, size)
-        # data = bytes()
-        
-        #receive messages until entire file arrives
-        # while size > 0:
-        #     data += sock.recv(1024)
-        #     size -= 1024
         
         fd = open(file,"wb")
         fd.write(data)
