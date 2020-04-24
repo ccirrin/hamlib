@@ -11,7 +11,7 @@ As a side note the port provided must be forwarded and ','s (commas) are not all
 As per firebase specifications, filenames must be UTF-8 encoded, can be a maximum of 768 bytes, and cannot contain ., $, #, [, ], /, or ASCII control characters 0-31 or 127. You cannot use ASCII control characters in the values themselves, either.
 
 ### How to Run
-We had to pip install these modules when testing on xinu machines:
+We had to pip install these modules when testing on Xinu machines:
 * python3 -m pip install wheel
 * python3 -m pip install firebase
 * python3 -m pip install python-jwt
