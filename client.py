@@ -65,13 +65,12 @@ def checkfiles(user):
 # Request a file, return true if request was successful, false if not
 def requestFile(user, ip, file):
     assert(len(ip) == 2)
-    print("\t-Requesting file: " + file + " from ip: " + ip[0])
-
-    # Create client socket that handles requesting files from other peers
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-
     try:
+        print("\t-Requesting file: " + file + " from ip: " + ip[0])
+
+        # Create client socket that handles requesting files from other peers
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(15)
         sock.connect((ip[0], ip[1]))
 
         http="GET " + file + " HTTP/1.1\r\n\r\n"
