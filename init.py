@@ -54,10 +54,19 @@ def main():
         ct.start()
 
         # Wait for client to press 'q' to quit the program
-        print("Type 'q' to quit!")
+        print("Type 'q' to quit, or switch channels by typing in the channel number!")
         a = input()
         while a != "q":
             a = input()
+            if a != "q":
+                for root, dirs, fil in os.walk(os.getcwd()):
+                    for f in fil:
+                        fire.discontinuefile(user, f)
+                user = fire.switchChannel(user,a)
+                ct._stop
+                ct = threading.Thread(target = client.filechecker, args = [user], daemon=True)
+                ct.start()
+                print("Switched to channel: ",a)
     except Exception as e:
         print(e)
     finally:
