@@ -5,8 +5,11 @@ A peer-2-peer network that allows others to instantly share files across their c
 Written with Python 3.8.2.
 But tested with Python 3.6 and 3.7 on Xinu machine.
 
+### Host Requirements
+The port provided to the program must be forwarded to be able to send files to peers.
+
 ### Filename Requirements
-As a side note the port provided must be forwarded and ','s (commas) are not allowed in the names of files.
+Commas (',') are not allowed in the names of files.
 
 As per firebase specifications, filenames must be UTF-8 encoded, can be a maximum of 768 bytes, and cannot contain ., $, #, [, ], /, or ASCII control characters 0-31 or 127. You cannot use ASCII control characters in the values themselves, either.
 
