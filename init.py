@@ -13,7 +13,13 @@ from requests import get
 # Description: Initialize program, prompt user for info, and start client
 # and server threads. Cleanup at end of execution as well.
 
-def cleanup(user, cwd, sock):
+def cleanup(user, cwd, sock, cthread, sthread):
+    if (cthread != None):
+        cthread._stop
+    
+    if (sthread != None):
+        sthread._stop
+
     if (sock != None):
         sock.close()
 
@@ -27,12 +33,14 @@ def joinchannel(ip):
     user = None
     chandir = None
     sock = None
+    ct = None
+    t = None
     try:
         # Prompt user for port and channel they would like to join
         user = fire.promptuser(ip)
 
         print("Joining channel:", user.channel)
-        print("Type '^C' to leave program or hit enter to join another channel")
+        print("Hit enter to join another channel")
 
         # Create a socket that handles listening for connections from other peers
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -53,24 +61,24 @@ def joinchannel(ip):
         ct = threading.Thread(target = client.filechecker, args = [user, chandir], daemon=True)
         ct.start()
 
+        # Wait for input to change channel
         input()
-        
-        # Stop the threads
-        ct._stop
-        t._stop
     except KeyboardInterrupt:
         # Cleanup current channel and exit
-        cleanup(user, chandir, sock)
+        cleanup(user, chandir, sock, ct, t)
         print("Thank you for using Hamlib!")
         sys.exit()
     except Exception as e:
         print(e)
     finally:
         # Cleanup current channel
-        cleanup(user, chandir, sock)
+        cleanup(user, chandir, sock, ct, t)
 
 def main():
+    print("------------------------------------------")
     print("Welcome to Hamlib!")
+    print("Use '^C' at any point to exit the program")
+    print("------------------------------------------")
     
     # Get ip address of host
     ip = get('https://api.ipify.org').text
