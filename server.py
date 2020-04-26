@@ -53,7 +53,7 @@ def handleConnection(sock, cwd):
     if "GET" in data:
         http = "HTTP/1.1"
         # Check if we have a file
-        if not os.path.exists(file):
+        if not os.path.exists(os.path.join(cwd, file)):
                 # If no file found send nothing found
                 print("\t-File does not exist: " + file)
                 http += "404 Not Found\r\n\r\n"
@@ -61,7 +61,7 @@ def handleConnection(sock, cwd):
         else:
             # If so call sendFile
             print("\t-Sending file: " + file)
-            http = "200 OK\r\n" +"Content-Length: " + str(os.stat(file).st_size)+ " \r\n\r\n"
+            http = "200 OK\r\n" +"Content-Length: " + str(os.stat(os.path.join(cwd, file)).st_size)+ " \r\n\r\n"
             http = bytes(http, encoding='utf8')
             sendFile(sock, http, file, cwd)
     sock.close()

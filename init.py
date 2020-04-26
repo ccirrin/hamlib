@@ -13,8 +13,11 @@ from requests import get
 # Description: Initialize program, prompt user for info, and start client
 # and server threads. Cleanup at end of execution as well.
 
-def cleanup(user, cwd):
-    if (user != None):
+def cleanup(user, cwd, sock):
+    if (sock != None):
+        sock.close()
+
+    if (user != None and cwd != None):
             # Inform server that files will no longer be available
             for root, dirs, fil in os.walk(cwd):
                 for f in fil:
@@ -22,12 +25,14 @@ def cleanup(user, cwd):
 
 def joinchannel(ip):
     user = None
+    chandir = None
+    sock = None
     try:
         # Prompt user for port and channel they would like to join
         user = fire.promptuser(ip)
 
         print("Joining channel:", user.channel)
-        print("Type '^C' to leave channel or '^C' to leave program")
+        print("Type '^C' to leave program or hit enter to join another channel")
 
         # Create a socket that handles listening for connections from other peers
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -48,7 +53,6 @@ def joinchannel(ip):
         ct = threading.Thread(target = client.filechecker, args = [user, chandir], daemon=True)
         ct.start()
 
-        print("Type '^C' to leave program or hit enter to join another channel")
         input()
         
         # Stop the threads
@@ -56,16 +60,14 @@ def joinchannel(ip):
         t._stop
     except KeyboardInterrupt:
         # Cleanup current channel and exit
-        cleanup(user, chandir)
-        sock.close()
+        cleanup(user, chandir, sock)
         print("Thank you for using Hamlib!")
         sys.exit()
     except Exception as e:
         print(e)
     finally:
         # Cleanup current channel
-        cleanup(user, chandir)
-        sock.close()
+        cleanup(user, chandir, sock)
 
 def main():
     print("Welcome to Hamlib!")
