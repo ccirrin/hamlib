@@ -9,16 +9,16 @@ import safesocket
 # Description: Provide functions that handle incoming GET requests, send the
 # file to the host that requested it.
 
-def sendFile(sock,http,file):
+def sendFile(sock, http, file, cwd):
     # Handle sending a file from downloads to a requester
     safesocket.safesend(sock, http)
-    f = open(file,"rb")
+    f = open(os.path.join(cwd, file), "rb")
     http = f.read()
     safesocket.safesend(sock, http)
     f.close()
 
 
-def peerListening(sock):
+def peerListening(sock, cwd):
     # Run Server Listening  
     while True:
         connection = None
@@ -27,9 +27,9 @@ def peerListening(sock):
         except:
             break
         connection.settimeout(15)
-        threading.Thread(target = handleConnection, args = [connection]).start()
+        threading.Thread(target = handleConnection, args = [connection, cwd]).start()
     
-def handleConnection(sock):
+def handleConnection(sock, cwd):
     data = sock.recv(2048) 
     data = str(data)
     space = 0
@@ -63,5 +63,5 @@ def handleConnection(sock):
             print("\t-Sending file: " + file)
             http = "200 OK\r\n" +"Content-Length: " + str(os.stat(file).st_size)+ " \r\n\r\n"
             http = bytes(http, encoding='utf8')
-            sendFile(sock,http,file)
+            sendFile(sock, http, file, cwd)
     sock.close()

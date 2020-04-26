@@ -12,18 +12,18 @@ import safesocket
 # new files added to channel directory.
 
 # Repeatedly check files to sync states
-def filechecker(user):
+def filechecker(user, cwd):
     while True:
         print("\t-Checking files")
-        checkfiles(user)
+        checkfiles(user, cwd)
         time.sleep(30)
 
 # Sync states between host and database
-def checkfiles(user):
+def checkfiles(user, cwd):
     localfiles = []
 
     # Check files in channel directory and track new files
-    for root, dirs, fil in os.walk(os.getcwd()):
+    for root, dirs, fil in os.walk(cwd):
         for f in fil:
             localfiles.append(f)
             fire.addfile(user, f)
@@ -53,7 +53,7 @@ def checkfiles(user):
                 ips.remove(ip)
                 
                 # Try requesting from another IP
-                if (requestFile(user, ip, f)):
+                if (requestFile(user, ip, f, cwd)):
                     # If we now have the file, let the database know
                     localfiles.append(f)
                     fire.addfile(user, f)
@@ -63,7 +63,7 @@ def checkfiles(user):
                 fire.informdb(user, ip, f)
 
 # Request a file, return true if request was successful, false if not
-def requestFile(user, ip, file):
+def requestFile(user, ip, file, cwd):
     assert(len(ip) == 2)
     try:
         print("\t-Requesting file: " + file + " from ip: " + ip[0])
@@ -99,7 +99,7 @@ def requestFile(user, ip, file):
         size = int(size)
         data = safesocket.safercv(sock, size)
         
-        fd = open(file,"wb")
+        fd = open(os.path.join(cwd, file),"wb")
         fd.write(data)
         fd.close()
         sock.close()
