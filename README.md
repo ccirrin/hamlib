@@ -24,5 +24,8 @@ We had to pip install these modules when testing on Xinu machines:
 * python3 -m pip install sseclient
 * python3 -m pip install gcloud
 
+However, you can simply run the following command to install all the modules:
+* python3 -m pip install -r requirements.txt
+
 Then to run the actual program type:
 * python3 init.py
