@@ -130,3 +130,6 @@ dmypy.json
 
 # channels
 channels/
+
+# Api Key
+secret.py
